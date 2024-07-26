@@ -23,15 +23,15 @@ resource "google_service_account_key" "google_service_account_key" {
 }
 
 resource "google_secret_manager_secret" "secret" {
-  count              = var.service_accounts_keys ? 1 : 0
+  count     = var.service_accounts_keys ? 1 : 0
   project   = var.project_id
   secret_id = var.account_id
 
   labels = {
-    tools = "terraform"
+    tools     = "terraform"
     create_by = "xxx-xx-xx"
-    req = "req-xxx"
-    type = "service-account-json"
+    req       = "req-xxx"
+    type      = "service-account-json"
   }
 
   replication {
@@ -41,7 +41,7 @@ resource "google_secret_manager_secret" "secret" {
 }
 
 resource "google_secret_manager_secret_version" "secret-version" {
-  count = var.service_accounts_keys ? 1 : 0
+  count  = var.service_accounts_keys ? 1 : 0
   secret = google_secret_manager_secret.secret[count.index].id
 
   secret_data = base64decode(google_service_account_key.google_service_account_key[0].private_key)
